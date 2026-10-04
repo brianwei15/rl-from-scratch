@@ -3,6 +3,8 @@ from grid_world import GridWorld
 from torch.distributions import Categorical
 import torch
 import numpy as np
+from visualization.grid_world import print_policy
+import matplotlib.pyplot as plt
 
 # device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 # print(f"Using: {device}")
@@ -100,7 +102,10 @@ def main():
             num_timeouts = 0
             steps_per_success = []
 
-
+    # Plot policy results
+    fig, ax = print_policy(policy, grid_world)
+    fig.savefig("policy.png", dpi=200)
+    plt.show()
 
 
 
