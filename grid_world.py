@@ -4,7 +4,7 @@ class Action(IntEnum):
     RIGHT = 0
     UP = 1
     LEFT = 2
-    RIGHT = 3
+    DOWN = 3
 
 ACTION_DELTAS = {
     Action.RIGHT: (1, 0),
@@ -16,7 +16,7 @@ ACTION_DELTAS = {
 class GridWorld():
     def __init__(self):
         self.pos: tuple[int, int] = (0, 0) # (x, y)
-        self.goal_pos: tuple[int, int] = [5, 5]
+        self.goal_pos: tuple[int, int] = (5, 5)
         self.mines: set[tuple[int, int]] = {(3, 3)}
         self.x_bound = 5
         self.y_bound = 5
@@ -26,11 +26,11 @@ class GridWorld():
         return self.pos
 
     def step_forward(self, action: int):
-        direction: Action = Action[action]
+        direction: Action = Action(action)
         delta_x, delta_y = ACTION_DELTAS[direction]
         new_pos: tuple[int, int] = (self.pos[0] + delta_x, self.pos[1] + delta_y)
         if (not self.in_bounds(new_pos)):
-            return self.pos, 0, False
+            return self.pos, -0.1, False
 
         # move to valid new pos and update reward and termination status accordingly
         self.pos = new_pos
@@ -45,6 +45,9 @@ class GridWorld():
             terminate = False
 
         return self.pos, reward, terminate
+
+    def at_goal(self) -> bool:
+        return self.pos == self.goal_pos
 
     def in_bounds(self, pos: tuple[int, int]):
         x, y = pos

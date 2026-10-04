@@ -2,6 +2,12 @@ from policy import Policy
 from grid_world import GridWorld
 from torch.distributions import Categorical
 import torch
+import numpy as np
+
+# device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+# print(f"Using: {device}")
+# if device.type == "cuda":
+#     print(torch.cuda.get_device_name(0))
 
 def main():
 
@@ -12,9 +18,15 @@ def main():
     policy = Policy()
 
     optimizer = torch.optim.Adam(policy.parameters(), lr=1e-3)
+    eval_freq = 100
+
+    num_successes = 0
+    num_failures = 0
+    num_timeouts = 0
+    steps_per_success = []
 
     # start train epoch
-    episodes = 1
+    episodes = 5000
     for episode in range(episodes):
         terminated = False
         G = []
@@ -47,13 +59,13 @@ def main():
 
             if terminated:
                 break
-
+        
         # calculate all of the G_i's
         # G[-1] contains the final reward r
         # G[i-1] = r[i-1] + gamma * G[i]
         # since we already assigned each G[k] to r[k] in the forward pass, 
         # we just need to iterate backwards and add the gamma * G[k+1] term
-        gamma = 0.9
+        gamma = 0.99
         for i in range(len(G) - 2, -1, -1):
             G[i] += gamma * G[i+1]
 
@@ -62,10 +74,31 @@ def main():
         # where log_probs[t] = log(pi(a_t|s_t)), the log prob of our policy choosing action a_t under state s_t
         for t in range(len(G)):
             loss -= gamma ** t * G[t] * log_probs[t]
+        # gamma ** t * 
 
         loss.backward()
         optimizer.step()
 
+
+        # tallying metrics
+        if grid_world.at_goal():
+            num_successes += 1
+            steps_per_success.append(step + 1)
+        elif terminated:
+            num_failures += 1
+        else:
+            num_timeouts += 1
+        
+        if (episode + 1) % eval_freq == 0:
+            goal_percentage = 100.0 * num_successes / eval_freq
+            mine_percentage = 100.0 * num_failures / eval_freq
+            timeout_percentage = 100.0 * num_timeouts / eval_freq
+            success_steps = np.mean(steps_per_success)
+            print(f"Episodes {episode - 99}-{episode + 1} | Goal: {goal_percentage}% | Mine: {mine_percentage}% | Timeout: {timeout_percentage}% | Success steps: {success_steps}")
+            num_successes = 0
+            num_failures = 0
+            num_timeouts = 0
+            steps_per_success = []
 
 
 
