@@ -1,5 +1,6 @@
 import torch
 import matplotlib.pyplot as plt
+import numpy as np
 
 @torch.no_grad()
 def print_policy(policy, env):
@@ -12,7 +13,7 @@ def print_policy(policy, env):
     states = [(x, y) for x in range(width) for y in range(height)]
     states_tensor = torch.tensor(states, dtype=torch.float32, device=device)
 
-    logits = policy(states_tensor / 5.0) # run inference on normalized i/p
+    logits = policy(states_tensor / (1.0 * env.x_bound)) # run inference on normalized i/p
     probabilities = torch.softmax(logits, dim=-1).cpu().tolist()
 
 
@@ -61,5 +62,33 @@ def print_policy(policy, env):
     ax.set_ylabel("y")
     ax.set_title("Policy: darker, thicker arrows = higher probability")
 
+    fig.tight_layout()
+    return fig, ax
+
+
+def plot_success_heatmap(success_rates, env):
+    """Show the frozen policy's sampled success rate from each starting cell."""
+    fig, ax = plt.subplots(figsize=(8, 7))
+    cmap = plt.get_cmap("Blues").copy()
+    cmap.set_bad("#eeeeee")
+    cells = ax.imshow(
+        np.ma.masked_invalid(success_rates), origin="lower",
+        vmin=0, vmax=100, cmap=cmap,
+    )
+    for x, y in env.mines:
+        ax.text(x, y, "MINE", ha="center", va="center", fontsize=8)
+    x, y = env.goal_pos
+    ax.text(x, y, "GOAL", ha="center", va="center", fontsize=8)
+
+    ax.set_xticks(range(env.x_bound + 1))
+    ax.set_yticks(range(env.y_bound + 1))
+    ax.set_xticks([i - 0.5 for i in range(env.x_bound + 2)], minor=True)
+    ax.set_yticks([i - 0.5 for i in range(env.y_bound + 2)], minor=True)
+    ax.grid(which="minor", color="white", linewidth=0.5)
+    ax.tick_params(which="minor", bottom=False, left=False)
+    ax.set_xlabel("x")
+    ax.set_ylabel("y")
+    ax.set_title("REINFORCE success by starting cell")
+    fig.colorbar(cells, ax=ax, label="Success rate (%)", ticks=[0, 25, 50, 75, 100])
     fig.tight_layout()
     return fig, ax

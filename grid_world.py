@@ -1,4 +1,5 @@
 from enum import IntEnum
+import random
 
 class Action(IntEnum):
     RIGHT = 0
@@ -14,15 +15,30 @@ ACTION_DELTAS = {
 }
 
 class GridWorld():
-    def __init__(self):
-        self.pos: tuple[int, int] = (0, 0) # (x, y)
-        self.goal_pos: tuple[int, int] = (5, 5)
-        self.mines: set[tuple[int, int]] = {(3, 3)}
-        self.x_bound = 5
-        self.y_bound = 5
+    def __init__(self, start_pos=None, goal_pos=(10, 10), mines={(3, 3)}, x_bound=10, y_bound=10, seed=1):
+        self.goal_pos: tuple[int, int] = goal_pos
+        self.mines: set[tuple[int, int]] = mines
+        self.x_bound = x_bound
+        self.y_bound = y_bound
 
-    def reset(self) -> tuple[int, int]:
-        self.pos = (0, 0)
+        self.rng = random.Random(seed)
+        self.start_positions = [
+            (x, y)
+            for x in range(self.x_bound + 1)
+            for y in range(self.y_bound + 1)
+            if (x, y) != self.goal_pos
+            and (x, y) not in self.mines
+        ]
+
+        self.reset(start_pos)
+
+    def reset(self, start=None) -> tuple[int, int]:
+        if start is None:
+            start = self.rng.choice(self.start_positions)
+        elif start not in self.start_positions:
+            raise ValueError(f"Invalid starting position: {start}")
+
+        self.pos = start
         return self.pos
 
     def step_forward(self, action: int):
