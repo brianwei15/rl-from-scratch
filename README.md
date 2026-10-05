@@ -11,6 +11,8 @@ The agent moves up, down, left, or right in an 11×11 grid with 4 fixed mines, a
 
 ## Reinforce algorithm
 
+REINFORCE waits until a rollout ends, then weights each action's log probability by its discounted return to update the policy.
+
 Derivations can be found [here](derivations/reinforce/RL_policy_gradient_derivation.pdf).
 
 ### Results
