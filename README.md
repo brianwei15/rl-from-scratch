@@ -39,3 +39,34 @@ Derivations can be found [here](derivations/reinforce/RL_policy_gradient_derivat
     </td>
   </tr>
 </table>
+
+## Actor Critic algorithm
+
+Instead of waiting for an entire rollout to finish to accumulate future rewards, use a critic to learn the value function for future timesteps
+
+Derivations can be found [here](derivations/actor_critic/RL-actor-critic-derivation.pdf).
+
+### Results
+
+<img src="outputs/actor_critic/learning_curve.png" alt="Actor Critic learning curve" width="400">
+
+<table>
+  <tr>
+    <td align="center">Success rate by starting cell</td>
+    <td align="center">Visualizing the learned policy</td>
+  </tr>
+  <tr>
+    <td>
+      <a href="outputs/actor_critic/success_heatmap.png">
+        <img src="outputs/actor_critic/success_heatmap.png"
+             alt="Success rate by starting cell" width="350">
+      </a>
+    </td>
+    <td>
+      <a href="outputs/actor_critic/policy_final.png">
+        <img src="outputs/actor_critic/policy_final.png"
+             alt="Action probabilities by cell" width="350">
+      </a>
+    </td>
+  </tr>
+</table>
