@@ -88,7 +88,7 @@ def plot_success_heatmap(success_rates, env):
     ax.tick_params(which="minor", bottom=False, left=False)
     ax.set_xlabel("x")
     ax.set_ylabel("y")
-    ax.set_title("REINFORCE success by starting cell")
+    ax.set_title("Success by starting cell")
     fig.colorbar(cells, ax=ax, label="Success rate (%)", ticks=[0, 25, 50, 75, 100])
     fig.tight_layout()
     return fig, ax

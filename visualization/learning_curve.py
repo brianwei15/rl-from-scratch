@@ -6,7 +6,7 @@ def plot_learning_curve(history):
     steps, success_rates = zip(*history)
     fig, ax = plt.subplots(figsize=(7, 4))
     ax.plot(steps, success_rates, color="tab:blue", linewidth=2)
-    ax.set_title("REINFORCE learning curve")
+    ax.set_title("Learning curve")
     ax.set_xlabel("Training environment steps")
     ax.set_ylabel("Evaluation success rate (%)")
     ax.set_ylim(0, 100)

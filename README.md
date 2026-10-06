@@ -42,7 +42,7 @@ Derivations can be found [here](derivations/reinforce/RL_policy_gradient_derivat
 
 ## Actor Critic algorithm
 
-Instead of waiting for an entire rollout to finish to accumulate future rewards, use a critic to learn the value function for future timesteps
+Instead of waiting for an entire rollout to finish to accumulate future rewards, use a critic to learn the value function for future timesteps. There is a parameter n that says how many timesteps ahead to track actual rewards before approximating the rest with the value function.
 
 Derivations can be found [here](derivations/actor_critic/RL-actor-critic-derivation.pdf).
 
