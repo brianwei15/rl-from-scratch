@@ -70,3 +70,34 @@ Derivations can be found [here](derivations/actor_critic/RL-actor-critic-derivat
     </td>
   </tr>
 </table>
+
+## GAE Actor Critic algorithm
+
+Generalized Advantage Estimation (GAE) combines advantage estimates from different rollout horizons using exponentially decaying weights. The parameter lambda controls how much weight is given to longer horizons before using these estimates to update the policy.
+
+Derivations can be found [here](derivations/gae/RL-gae-derivation.pdf).
+
+### Results
+
+<img src="outputs/gae_actor_critic/learning_curve.png" alt="GAE Actor Critic learning curve" width="400">
+
+<table>
+  <tr>
+    <td align="center">Success rate by starting cell</td>
+    <td align="center">Visualizing the learned policy</td>
+  </tr>
+  <tr>
+    <td>
+      <a href="outputs/gae_actor_critic/success_heatmap.png">
+        <img src="outputs/gae_actor_critic/success_heatmap.png"
+             alt="Success rate by starting cell" width="350">
+      </a>
+    </td>
+    <td>
+      <a href="outputs/gae_actor_critic/policy_final.png">
+        <img src="outputs/gae_actor_critic/policy_final.png"
+             alt="Action probabilities by cell" width="350">
+      </a>
+    </td>
+  </tr>
+</table>
