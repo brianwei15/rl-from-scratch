@@ -101,3 +101,32 @@ Derivations can be found [here](derivations/gae/RL-gae-derivation.pdf).
     </td>
   </tr>
 </table>
+
+## PPO algorithm
+
+Proximal Policy Optimization (PPO) reuses each rollout for multiple updates while discouraging large changes to the policy. This implementation uses GAE to estimate advantages and clips the policy probability ratio in the objective to reduce the incentive for excessive updates.
+
+### Results
+
+<img src="outputs/ppo-clip_gae/learning_curve.png" alt="PPO learning curve" width="400">
+
+<table>
+  <tr>
+    <td align="center">Success rate by starting cell</td>
+    <td align="center">Visualizing the learned policy</td>
+  </tr>
+  <tr>
+    <td>
+      <a href="outputs/ppo-clip_gae/success_heatmap.png">
+        <img src="outputs/ppo-clip_gae/success_heatmap.png"
+             alt="Success rate by starting cell" width="350">
+      </a>
+    </td>
+    <td>
+      <a href="outputs/ppo-clip_gae/policy_final.png">
+        <img src="outputs/ppo-clip_gae/policy_final.png"
+             alt="Action probabilities by cell" width="350">
+      </a>
+    </td>
+  </tr>
+</table>
