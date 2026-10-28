@@ -5,9 +5,9 @@ class Policy(nn.Module):
         super().__init__()
 
         self.policy = nn.Sequential(
-            nn.Linear(in_features=2, out_features=32, bias=True),
+            nn.Linear(in_features=2, out_features=128, bias=True),
             nn.ReLU(),
-            nn.Linear(in_features=32, out_features=4, bias=True), # outputs 1 logit per direction
+            nn.Linear(in_features=128, out_features=4, bias=True), # outputs 1 logit per direction
         )
 
     def forward(self, state):
